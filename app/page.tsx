@@ -5,8 +5,12 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main>
+    <main style={{
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
       <Link href='/animations/floatingSpheres'>Floating Spheres</Link>
+      <Link href='/animations/circularSpheres'>Circular Spheres</Link>
     </main>
   );
 }
