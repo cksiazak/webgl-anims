@@ -3,7 +3,7 @@
 import { CameraControls, Sphere } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 
-import { points } from '../floatingSpheres/utils'
+import { points } from './utils'
 import { useRef } from 'react'
 import { Group } from 'three'
 import { DotScreen, EffectComposer } from '@react-three/postprocessing'
@@ -11,11 +11,13 @@ import { DotScreen, EffectComposer } from '@react-three/postprocessing'
 const InnerCanvas = () => {
   const ref = useRef<Group>(null!);
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock, pointer }) => {
     if (ref.current?.rotation) {
-      ref.current.rotation.z = clock.getElapsedTime() * 0.05;
+      ref.current.rotation.z = clock.getElapsedTime() * 0.05
+      // ref.current.rotation.y = pointer.y / 10
+      // ref.current.rotation.x = pointer.x / 10
     }
-  });
+  })
 
   return (
     <group ref={ref}>
@@ -31,12 +33,17 @@ const InnerCanvas = () => {
 const First = () => {
   const aspect = typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1
   return (
-    <div style={{ height: '100%', width: '100%', background: 'black' }}>
-      <Canvas style={{ width: '100%', height: '100%' }} camera={{ position: [0, 0, -10] }} shadows>
-        <directionalLight intensity={0.5} />
-        <ambientLight />
-        <InnerCanvas />
-      </Canvas>
+    <div style={{
+      height: '100vh',
+      width: '100vw'
+    }}>
+      <div style={{ height: '100%', width: '100%', background: 'black' }}>
+        <Canvas style={{ width: '100%', height: '100%' }} camera={{ position: [0, 0, -10] }} shadows>
+          <directionalLight intensity={0.8} />
+          <ambientLight />
+          <InnerCanvas />
+        </Canvas>
+      </div>
     </div>
   )
 }
