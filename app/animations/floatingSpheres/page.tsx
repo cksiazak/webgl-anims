@@ -5,26 +5,33 @@ import { Canvas, useFrame } from '@react-three/fiber'
 
 import { points } from './utils'
 import { useRef } from 'react'
-import { Group } from 'three'
+import { Group, Mesh } from 'three'
 import { DotScreen, EffectComposer } from '@react-three/postprocessing'
+
+const Point = ({ point }: { point: typeof points[0]}) => {
+  const ref = useRef<Mesh>(null!);
+
+  return (
+    <Sphere ref={ref} position={point.position} args={[1, 4, 4]} rotation={point.rotation} scale={point.scale}>
+      <meshStandardMaterial flatShading color='purple' emissive={'purple'} emissiveIntensity={0.1} roughness={0.5} />
+    </Sphere>
+  )
+}
 
 const InnerCanvas = () => {
   const ref = useRef<Group>(null!);
 
-  useFrame(({ clock, pointer }) => {
+  useFrame(({ pointer }) => {
     if (ref.current?.rotation) {
-      ref.current.rotation.z = clock.getElapsedTime() * 0.05
-      // ref.current.rotation.y = pointer.y / 10
-      // ref.current.rotation.x = pointer.x / 10
+      ref.current.rotation.y = pointer.y / 10
+      ref.current.rotation.x = pointer.x / 10
     }
   })
 
   return (
     <group ref={ref}>
-      {points.map((point, key) => (
-        <Sphere key={key} position={point.position} args={[1, 4, 4]} rotation={point.rotation} scale={point.scale}>
-          <meshStandardMaterial flatShading color='purple' emissive={'purple'} emissiveIntensity={0.1} roughness={0.5} />
-        </Sphere>
+      {points.map((point: typeof points[0]) => (
+        <Point key={point.idx as number} point={point} />
       ))}
     </group>
   )

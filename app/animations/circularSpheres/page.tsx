@@ -1,12 +1,20 @@
 'use client'
 
 import { CameraControls, Sphere } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, Vector3, useFrame } from '@react-three/fiber'
 
 import { points } from './utils'
-import { useRef } from 'react'
-import { Group } from 'three'
+import { FC, useRef } from 'react'
+import { Group, Mesh } from 'three'
 import { DotScreen, EffectComposer } from '@react-three/postprocessing'
+
+const Point = ({ point }: { point: typeof points[0]}) => {
+  return (
+    <Sphere position={point.position} args={[0.1, 10, 10]} scale={point.scale}>
+        <meshStandardMaterial color='purple' emissive={'purple'} emissiveIntensity={0.5} roughness={0.5} />
+    </Sphere>
+  )
+}
 
 const InnerCanvas = () => {
   const ref = useRef<Group>(null!);
@@ -21,10 +29,8 @@ const InnerCanvas = () => {
 
   return (
     <group ref={ref}>
-      {points.map((point, key) => (
-        <Sphere key={key} position={point.position} args={[0.1, 10, 10]} scale={point.scale}>
-          <meshStandardMaterial color='purple' emissive={'purple'} emissiveIntensity={0.5} roughness={0.5} />
-        </Sphere>
+      {points.map((point: typeof points[0]) => (
+        <Point key={point.idx as number} point={point} />
       ))}
     </group>
   )
@@ -39,7 +45,7 @@ const CircularSpheres = () => {
     }}>
       <div style={{ height: '100%', width: '100%', background: 'black' }}>
         <Canvas style={{ width: '100%', height: '100%' }} camera={{ position: [0, 0, -10] }} shadows>
-          <directionalLight intensity={0.8} />
+          <directionalLight intensity={0.5} />
           <ambientLight />
           <InnerCanvas />
         </Canvas>

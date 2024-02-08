@@ -1,12 +1,6 @@
 import { Euler, Vector3 } from "@react-three/fiber";
 
-const LEFT_COLOR = "6366f1";
-const RIGHT_COLOR = "8b5cf6"
 const NUM_POINTS = 100;
-
-const randomFromInterval = (min: number, max: number) => {
-  return Math.random() * (max - min) + min;
-};
 
 export const points = Array.from(
   { length: NUM_POINTS }
